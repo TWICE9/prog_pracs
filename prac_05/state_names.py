@@ -14,7 +14,7 @@ STATE_NAMES = {"QLD": "Queensland", "NSW": "New South Wales",
 # print(*STATE_NAMES, sep="\n".rjust(3))
 
 for x, y in STATE_NAMES.items():
-    print("{:3} is {}".format(x, y))
+    print("{:} is {}".format(x, y))
 
 state = input("\nEnter short state: ").upper()
 while state != "":
