@@ -10,7 +10,7 @@ COLOUR_CODES = {"AliceBlue": "#f0f8ff", "AntiqueWhite": "#faebd7",
 def main():
     name_of_colour = input("Enter a colour name: ")
     while name_of_colour != "":
-        print("The code for \"{}\" is {}".format(name_of_colour, COLOUR_CODES.get(name_of_colour)))
+        print("The code for {} is {}".format(name_of_colour, COLOUR_CODES.get(name_of_colour)))
         name_of_colour = input("Enter a colour name: ")
 
 
