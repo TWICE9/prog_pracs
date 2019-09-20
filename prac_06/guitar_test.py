@@ -1,4 +1,4 @@
-from week_06.guitar import Guitar
+from prac_06.guitar import Guitar
 
 CURRENT_YEAR = 2019
 
