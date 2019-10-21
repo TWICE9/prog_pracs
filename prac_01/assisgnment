@@ -1,0 +1,131 @@
+import csv
+from operator import itemgetter
+
+"""..."""
+# TODO: Copy your first assignment to this file, then update it to use Movie class
+# Optionally, you may also use MovieCollection class
+
+
+"""
+Replace the contents of this module docstring with your own details
+Name: Jesseta Thach
+Date started: 26/08/2019
+GitHub URL: https://github.com/cp1404-students/2019-2-a1-TWICE9
+"""
+
+"""Opens movies.csv and appends it to a list."""
+
+movie_list = []
+with open('movies.csv', 'r') as (movies):
+    movie_reader = csv.reader(movies)
+    for movie in movie_reader:
+        movie_list.append([movie[0], (int(movie[1])), movie[2], movie[3]])
+MOVIE_COUNTER = -1
+
+
+def main():
+    """continues to Menu selection function."""
+    print("Movies To Watch 1.0 - by Jesseta Thach")
+    menu_selection()
+
+
+def menu_selection():
+    """Prints Menu which then passes to other functions."""
+    movie_list.sort(key=itemgetter(1))
+    menu_list = ["L", "A", "W", "Q"]
+    menu = input("Menu:\nL - List movies\nA - Add new movie\nW - Watch a movie\nQ - Quit\n>>>").upper()
+    while menu not in menu_list:
+        print("Invalid menu choice...")
+        menu = input("Menu:\nL - List movies\nA - Add new movie\nW - Watch a movie\nQ - Quit\n>>>").upper()
+    if menu == "L":
+        list_movies(MOVIE_COUNTER)
+    elif menu == "A":
+        add_movies()
+        menu_selection()
+    elif menu == "W":
+        watch_a_movie()
+    elif menu == "Q":
+        with open('movies.csv', 'w', newline='') as movies:
+            writer = csv.writer(movies)
+            writer.writerows(movie_list)
+        print("{} movies saved to movies.csv\nHave a nice day :)".format(len(movie_list)))
+        quit()
+
+
+def list_movies(counter):
+    """Lists all the current movies in List."""
+    for row in movie_list:
+        counter += 1
+        if row[3] == 'u':
+            print(" {}. * {:35} - {:5} ({}) ".format(counter, *row))
+        else:
+            print(" {}.   {:35} - {:5} ({})".format(counter, *row))
+    display_watched_and_unwatched()
+
+
+def display_watched_and_unwatched():
+    """Displays amount of watched and unwatched movies."""
+    unwatched_movies = sum(x.count("u") for x in movie_list)
+    watched_movies = sum(x.count("w") for x in movie_list)
+    print("{} movies watched, {} movie(s) still to watch.".format(watched_movies, unwatched_movies))
+    menu_selection()
+
+
+def add_movies():
+    """Function to add a new movie which then appends to the list."""
+    title = input("Title: ")
+    while not title:
+        print("Title cannot be blank...")
+        title = input("Title: ")
+    finished = False
+    while not finished:
+        try:
+            date_released = int(input("Year: "))
+            if date_released <= 0:
+                print("Number must be >= 0")
+            else:
+                finished = True
+        except ValueError:
+            print("Invalid; please enter the year")
+    movie_genre = input("Category: ")
+    while not movie_genre:
+        print("Cannot be blank...")
+        movie_genre = input("Category: ")
+    new_movie = [title, date_released, movie_genre, 'u']
+    movie_list.append(new_movie)
+    print("{} (drama from {}) added to movie list".format(title, date_released))
+    menu_selection()
+
+
+def watch_a_movie():
+    """Marks the movie from unwatched to watched and prints if the movie is already watched."""
+    finished = False
+    movie_number = 0
+    total_movies = (len(movie_list) - 1)
+    unwatched_movies = sum(x.count("u") for x in movie_list)
+    if unwatched_movies == 0:
+        print("No more movies to watch!")
+        menu_selection()
+    else:
+        while not finished:
+            try:
+                movie_number = int(input("Enter the number of the movie to mark as watched.\n>>> "))
+                if movie_number > total_movies:
+                    print("invalid number")
+                elif movie_number < 0:
+                    print("Number must be >= 0")
+                else:
+                    finished = True
+            except ValueError:
+                print("Invalid input; enter a valid number")
+    watched_movie = movie_list[movie_number]
+    if watched_movie[3] == "w":
+        print("You have already watched {}.".format(watched_movie[0]))
+    else:
+        watched_movie[3] = "w"
+        print("{} from {} watched.".format(watched_movie[0], watched_movie[1]))
+    menu_selection()
+
+
+if __name__ == '__main__':
+    main()
