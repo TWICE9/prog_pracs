@@ -1,6 +1,3 @@
-import csv
-from operator import itemgetter
-
 """..."""
 # TODO: Copy your first assignment to this file, then update it to use Movie class
 # Optionally, you may also use MovieCollection class
@@ -13,8 +10,10 @@ Date started: 26/08/2019
 GitHub URL: https://github.com/cp1404-students/2019-2-a1-TWICE9
 """
 
-"""Opens movies.csv and appends it to a list."""
+import csv
+from operator import itemgetter
 
+# Opens movies.csv and appends it to a list.
 movie_list = []
 with open('movies.csv', 'r') as (movies):
     movie_reader = csv.reader(movies)
@@ -23,15 +22,15 @@ with open('movies.csv', 'r') as (movies):
 MOVIE_COUNTER = -1
 
 
+# continues to Menu selection function.
 def main():
-    """continues to Menu selection function."""
     print("Movies To Watch 1.0 - by Jesseta Thach")
     menu_selection()
 
 
+# Prints Menu which then passes to other functions.
 def menu_selection():
-    """Prints Menu which then passes to other functions."""
-    movie_list.sort(key=itemgetter(1))
+    movie_list.sort(key=itemgetter(1, 0))
     menu_list = ["L", "A", "W", "Q"]
     menu = input("Menu:\nL - List movies\nA - Add new movie\nW - Watch a movie\nQ - Quit\n>>>").upper()
     while menu not in menu_list:
@@ -52,8 +51,8 @@ def menu_selection():
         quit()
 
 
+# Lists all the current movies in List.
 def list_movies(counter):
-    """Lists all the current movies in List."""
     for row in movie_list:
         counter += 1
         if row[3] == 'u':
@@ -63,16 +62,16 @@ def list_movies(counter):
     display_watched_and_unwatched()
 
 
+# Displays amount of watched and unwatched movies.
 def display_watched_and_unwatched():
-    """Displays amount of watched and unwatched movies."""
     unwatched_movies = sum(x.count("u") for x in movie_list)
     watched_movies = sum(x.count("w") for x in movie_list)
     print("{} movies watched, {} movie(s) still to watch.".format(watched_movies, unwatched_movies))
     menu_selection()
 
 
+# Function to add a new movie which then appends to the list.
 def add_movies():
-    """Function to add a new movie which then appends to the list."""
     title = input("Title: ")
     while not title:
         print("Title cannot be blank...")
@@ -90,15 +89,15 @@ def add_movies():
     movie_genre = input("Category: ")
     while not movie_genre:
         print("Cannot be blank...")
-        movie_genre = input("Category: ")
+        movie_genre = input("Enter the movies Genre: ")
     new_movie = [title, date_released, movie_genre, 'u']
     movie_list.append(new_movie)
     print("{} (drama from {}) added to movie list".format(title, date_released))
     menu_selection()
 
 
+# Marks the movie from unwatched to watched and prints if the movie is already watched.
 def watch_a_movie():
-    """Marks the movie from unwatched to watched and prints if the movie is already watched."""
     finished = False
     movie_number = 0
     total_movies = (len(movie_list) - 1)
